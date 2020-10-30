@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Fundamental Submission GitHub API</string>
+    <string name="title_activity_detail">DetailActivity</string>
+    <string name="tab_text_1">Followers</string>
+    <string name="tab_text_2">Following</string>
+    <string name="open_in_browser">Open in browser</string>
+    <string name="detail_user">Detail user</string>
 </resources>

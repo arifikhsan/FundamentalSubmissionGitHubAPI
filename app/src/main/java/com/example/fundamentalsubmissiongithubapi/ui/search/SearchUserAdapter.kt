@@ -1,4 +1,4 @@
-package com.example.fundamentalsubmissiongithubapi.ui
+package com.example.fundamentalsubmissiongithubapi.ui.search
 
 import android.view.LayoutInflater
 import android.view.View
@@ -12,7 +12,7 @@ import kotlinx.android.synthetic.main.item_search_user.view.*
 
 class SearchUserAdapter(private val listUser: ArrayList<User>) :
     RecyclerView.Adapter<SearchUserAdapter.SearchUserViewHolder>() {
-    var clickListener: RecyclerViewSearchUserClickListener? = null
+    var clickListener: RecyclerViewUserClickListener? = null
 
     class SearchUserViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind(user: User) {

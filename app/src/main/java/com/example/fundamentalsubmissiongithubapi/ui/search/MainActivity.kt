@@ -1,5 +1,6 @@
-package com.example.fundamentalsubmissiongithubapi.ui
+package com.example.fundamentalsubmissiongithubapi.ui.search
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -9,14 +10,15 @@ import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.fundamentalsubmissiongithubapi.R
 import com.example.fundamentalsubmissiongithubapi.model.User
+import com.example.fundamentalsubmissiongithubapi.ui.detail.DetailActivity
 import com.loopj.android.http.AsyncHttpClient
 import com.loopj.android.http.AsyncHttpResponseHandler
 import cz.msebera.android.httpclient.Header
 import kotlinx.android.synthetic.main.activity_main.*
 import org.json.JSONObject
 
-class MainActivity : AppCompatActivity(), RecyclerViewSearchUserClickListener {
-    private var searchUsername = "aaa"
+class MainActivity : AppCompatActivity(), RecyclerViewUserClickListener {
+    private var searchUsername = "arif"
     private val baseUrl = "https://api.github.com/"
     private var searchUserResult = ArrayList<User>()
 
@@ -28,10 +30,10 @@ class MainActivity : AppCompatActivity(), RecyclerViewSearchUserClickListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         initView()
+        searchUserByUsername()
     }
 
     private fun initView() {
-
         sv_search_user.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextChange(newText: String?): Boolean = false
             override fun onQueryTextSubmit(query: String?): Boolean {
@@ -65,11 +67,11 @@ class MainActivity : AppCompatActivity(), RecyclerViewSearchUserClickListener {
                 for (i in 0 until items.length()) {
                     val userObject = items.getJSONObject(i)
                     val user = User(
-                        userObject.getInt("id"),
-                        userObject.getString("login"),
-                        userObject.getString("login"),
-                        userObject.getString("avatar_url"),
-                        userObject.getString("type")
+                        id = userObject.getInt("id"),
+                        login = userObject.getString("login"),
+                        name = userObject.getString("login"),
+                        avatarUrl = userObject.getString("avatar_url"),
+                        type = userObject.getString("type")
                     )
                     searchUserResult.add(user)
                 }
@@ -87,7 +89,6 @@ class MainActivity : AppCompatActivity(), RecyclerViewSearchUserClickListener {
                 error?.printStackTrace()
             }
         })
-
     }
 
     private fun showSearchUser() {
@@ -101,5 +102,8 @@ class MainActivity : AppCompatActivity(), RecyclerViewSearchUserClickListener {
 
     override fun onItemClicked(view: View, user: User) {
         Toast.makeText(this@MainActivity, "Get detail for ${user.login}", Toast.LENGTH_SHORT).show()
+        val intent = Intent(this, DetailActivity::class.java)
+        intent.putExtra(DetailActivity.EXTRA_USERNAME, user.login)
+        startActivity(intent)
     }
 }
