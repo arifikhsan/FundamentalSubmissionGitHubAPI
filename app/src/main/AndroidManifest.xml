@@ -13,16 +13,21 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.FundamentalSubmissionGitHubAPI"
         tools:ignore="AllowBackup">
-        <activity
-            android:name=".ui.detail.DetailActivity"
-            android:label="@string/title_activity_detail"
-            android:theme="@style/Theme.FundamentalSubmissionGitHubAPI.NoActionBar"></activity>
         <activity android:name=".ui.search.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".ui.detail.DetailActivity"
+            android:label="@string/title_activity_detail"
+            android:parentActivityName=".ui.search.MainActivity"
+            android:theme="@style/Theme.FundamentalSubmissionGitHubAPI.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.search.MainActivity" />
         </activity>
     </application>
 

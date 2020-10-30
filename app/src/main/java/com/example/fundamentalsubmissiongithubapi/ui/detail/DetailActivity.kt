@@ -10,6 +10,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.fundamentalsubmissiongithubapi.R
 import com.example.fundamentalsubmissiongithubapi.model.User
+import com.example.fundamentalsubmissiongithubapi.repository.GitHubRepository
 import com.example.fundamentalsubmissiongithubapi.ui.detail.ui.main.SectionsPagerAdapter
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
@@ -24,7 +25,6 @@ class DetailActivity : AppCompatActivity() {
     companion object {
         const val EXTRA_USERNAME = "extra_username"
         private val TAG = DetailActivity::class.java.simpleName
-        private const val baseUrl = "https://api.github.com/"
         private var username = ""
         private lateinit var user: User
     }
@@ -43,7 +43,7 @@ class DetailActivity : AppCompatActivity() {
         client.addHeader("User-Agent", "request")
         detail_loading_indicator.visibility = View.VISIBLE
 
-        client.get("${baseUrl}users/$username", object : AsyncHttpResponseHandler() {
+        client.get("${GitHubRepository.BASE_URL}users/$username", object : AsyncHttpResponseHandler() {
             override fun onSuccess(
                 statusCode: Int,
                 headers: Array<out Header>?,
@@ -52,7 +52,6 @@ class DetailActivity : AppCompatActivity() {
                 detail_loading_indicator.visibility = View.INVISIBLE
                 val result = String(responseBody)
                 val userObject = JSONObject(result)
-                val name = userObject.getString("name")
 
                 user = User(
                     id = userObject.getInt("id"),
@@ -63,6 +62,8 @@ class DetailActivity : AppCompatActivity() {
                     bio = userObject.getString("bio"),
                     follower = userObject.getInt("followers"),
                     following = userObject.getInt("following"),
+                    publicRepos = userObject.getInt("public_repos"),
+                    publicGists = userObject.getInt("public_gists"),
                 )
                 populateView()
             }
@@ -93,16 +94,15 @@ class DetailActivity : AppCompatActivity() {
         }
         tv_follower.text = "Followers: ${user.follower}"
         tv_following.text = "Following: ${user.following}"
+        tv_public_repos.text = "${user.publicRepos} Public Repositories"
+        tv_public_gists.text = "${user.publicGists} Public Gists"
     }
 
     private fun initView() {
         val sectionsPagerAdapter = SectionsPagerAdapter(this, supportFragmentManager)
-        val viewPager: ViewPager = findViewById(R.id.view_pager)
-        viewPager.adapter = sectionsPagerAdapter
-        val tabs: TabLayout = findViewById(R.id.tabs)
-        tabs.setupWithViewPager(viewPager)
-        val fab: FloatingActionButton = findViewById(R.id.fab)
+        view_pager.adapter = sectionsPagerAdapter
 
+        tabs.setupWithViewPager(view_pager)
         fab.setOnClickListener { view ->
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show()

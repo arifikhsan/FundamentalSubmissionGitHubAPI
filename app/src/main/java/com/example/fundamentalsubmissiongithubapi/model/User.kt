@@ -12,6 +12,8 @@ data class User(
     val type: String,
     val bio: String = "",
     val follower: Int = 0,
-    val following: Int = 0
+    val following: Int = 0,
+    val publicRepos: Int = 0,
+    val publicGists: Int = 0,
 ) :
     Parcelable

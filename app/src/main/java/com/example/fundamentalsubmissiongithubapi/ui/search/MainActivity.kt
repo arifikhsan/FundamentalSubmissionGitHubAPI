@@ -10,6 +10,7 @@ import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.fundamentalsubmissiongithubapi.R
 import com.example.fundamentalsubmissiongithubapi.model.User
+import com.example.fundamentalsubmissiongithubapi.repository.GitHubRepository
 import com.example.fundamentalsubmissiongithubapi.ui.detail.DetailActivity
 import com.loopj.android.http.AsyncHttpClient
 import com.loopj.android.http.AsyncHttpResponseHandler
@@ -19,7 +20,6 @@ import org.json.JSONObject
 
 class MainActivity : AppCompatActivity(), RecyclerViewUserClickListener {
     private var searchUsername = "arif"
-    private val baseUrl = "https://api.github.com/"
     private var searchUserResult = ArrayList<User>()
 
     companion object {
@@ -53,42 +53,44 @@ class MainActivity : AppCompatActivity(), RecyclerViewUserClickListener {
         client.addHeader("Authorization", "df97872248fb3eecacba97569ad7156b9674c9df")
         client.addHeader("User-Agent", "request")
 
-        client.get("${baseUrl}search/users?q=$searchUsername", object : AsyncHttpResponseHandler() {
-            override fun onSuccess(
-                statusCode: Int,
-                headers: Array<out Header>?,
-                responseBody: ByteArray
-            ) {
-                loading_indicator.visibility = View.INVISIBLE
-                val result = String(responseBody)
+        client.get(
+            "${GitHubRepository.BASE_URL}search/users?q=$searchUsername",
+            object : AsyncHttpResponseHandler() {
+                override fun onSuccess(
+                    statusCode: Int,
+                    headers: Array<out Header>?,
+                    responseBody: ByteArray
+                ) {
+                    loading_indicator.visibility = View.INVISIBLE
+                    val result = String(responseBody)
 
-                val jsonObject = JSONObject(result)
-                val items = jsonObject.getJSONArray("items")
-                for (i in 0 until items.length()) {
-                    val userObject = items.getJSONObject(i)
-                    val user = User(
-                        id = userObject.getInt("id"),
-                        login = userObject.getString("login"),
-                        name = userObject.getString("login"),
-                        avatarUrl = userObject.getString("avatar_url"),
-                        type = userObject.getString("type")
-                    )
-                    searchUserResult.add(user)
+                    val jsonObject = JSONObject(result)
+                    val items = jsonObject.getJSONArray("items")
+                    for (i in 0 until items.length()) {
+                        val userObject = items.getJSONObject(i)
+                        val user = User(
+                            id = userObject.getInt("id"),
+                            login = userObject.getString("login"),
+                            name = userObject.getString("login"),
+                            avatarUrl = userObject.getString("avatar_url"),
+                            type = userObject.getString("type")
+                        )
+                        searchUserResult.add(user)
+                    }
+                    showSearchUser()
                 }
-                showSearchUser()
-            }
 
-            override fun onFailure(
-                statusCode: Int,
-                headers: Array<out Header>?,
-                responseBody: ByteArray?,
-                error: Throwable?
-            ) {
-                loading_indicator.visibility = View.INVISIBLE
-                Log.d(TAG, "onFailure: $statusCode | ${error?.message}")
-                error?.printStackTrace()
-            }
-        })
+                override fun onFailure(
+                    statusCode: Int,
+                    headers: Array<out Header>?,
+                    responseBody: ByteArray?,
+                    error: Throwable?
+                ) {
+                    loading_indicator.visibility = View.INVISIBLE
+                    Log.d(TAG, "onFailure: $statusCode | ${error?.message}")
+                    error?.printStackTrace()
+                }
+            })
     }
 
     private fun showSearchUser() {
