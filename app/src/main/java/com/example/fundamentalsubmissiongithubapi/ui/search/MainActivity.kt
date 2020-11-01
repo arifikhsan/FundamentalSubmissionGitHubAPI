@@ -30,10 +30,10 @@ class MainActivity : AppCompatActivity(), RecyclerViewUserClickListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         initView()
-//        searchUserByUsername()
     }
 
     private fun initView() {
+        sv_search_user.setOnClickListener { sv_search_user.isIconified = false }
         sv_search_user.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextChange(newText: String?): Boolean = false
             override fun onQueryTextSubmit(query: String?): Boolean {
