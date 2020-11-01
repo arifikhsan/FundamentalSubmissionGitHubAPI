@@ -203,5 +203,5 @@
         android:contentDescription="@string/open_in_browser"
         android:src="@drawable/ic_open_in_new"
         android:tint="@android:color/white"
-        tools:tint="@color/white" />
+        app:tint="@color/white" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
