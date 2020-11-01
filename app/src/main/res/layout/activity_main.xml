@@ -15,6 +15,7 @@
         android:background="@drawable/search_view_background"
         android:clickable="true"
         android:focusable="true"
+        app:queryHint="Enter username"
         android:queryHint="Search GitHub user by username"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -24,6 +25,19 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:padding="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/sv_search_user" />
+
+    <TextView
+        android:id="@+id/tv_begin_search"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/begin_search_by_username"
+        android:textAlignment="center"
+        android:gravity="center"
+        android:textSize="32sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/sv_search_user" />
 
     <ProgressBar

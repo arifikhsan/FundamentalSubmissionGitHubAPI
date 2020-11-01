@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity(), RecyclerViewUserClickListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         initView()
-        searchUserByUsername()
+//        searchUserByUsername()
     }
 
     private fun initView() {
@@ -41,7 +41,6 @@ class MainActivity : AppCompatActivity(), RecyclerViewUserClickListener {
                 searchUserResult.clear()
                 sv_search_user.clearFocus()
                 searchUsername = query.toString()
-                Toast.makeText(this@MainActivity, "Searching for $query", Toast.LENGTH_SHORT).show()
                 searchUserByUsername()
                 return true
             }
@@ -49,6 +48,8 @@ class MainActivity : AppCompatActivity(), RecyclerViewUserClickListener {
     }
 
     private fun searchUserByUsername() {
+        tv_begin_search.visibility = View.INVISIBLE
+
         val client = AsyncHttpClient()
         client.addHeader("Authorization", "df97872248fb3eecacba97569ad7156b9674c9df")
         client.addHeader("User-Agent", "request")
