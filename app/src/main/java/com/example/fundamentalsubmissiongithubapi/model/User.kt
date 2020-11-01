@@ -11,6 +11,7 @@ data class User(
     val avatarUrl: String,
     val type: String,
     val bio: String = "",
+    val htmlUrl: String = "",
     val follower: Int = 0,
     val following: Int = 0,
     val publicRepos: Int = 0,

@@ -1,6 +1,8 @@
 package com.example.fundamentalsubmissiongithubapi.ui.detail
 
 import android.annotation.SuppressLint
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -11,15 +13,13 @@ import com.bumptech.glide.request.RequestOptions
 import com.example.fundamentalsubmissiongithubapi.R
 import com.example.fundamentalsubmissiongithubapi.model.User
 import com.example.fundamentalsubmissiongithubapi.repository.GitHubRepository
-import com.example.fundamentalsubmissiongithubapi.ui.detail.ui.main.SectionsPagerAdapter
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.tabs.TabLayout
 import com.loopj.android.http.AsyncHttpClient
 import com.loopj.android.http.AsyncHttpResponseHandler
 import cz.msebera.android.httpclient.Header
 import kotlinx.android.synthetic.main.activity_detail.*
 import org.json.JSONObject
+
 
 class DetailActivity : AppCompatActivity() {
     companion object {
@@ -32,8 +32,8 @@ class DetailActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail)
-        initView()
         username = intent.getStringExtra(EXTRA_USERNAME) ?: "arifikhsan"
+        initView()
         searchUserByUsername()
     }
 
@@ -43,42 +43,45 @@ class DetailActivity : AppCompatActivity() {
         client.addHeader("User-Agent", "request")
         detail_loading_indicator.visibility = View.VISIBLE
 
-        client.get("${GitHubRepository.BASE_URL}users/$username", object : AsyncHttpResponseHandler() {
-            override fun onSuccess(
-                statusCode: Int,
-                headers: Array<out Header>?,
-                responseBody: ByteArray
-            ) {
-                detail_loading_indicator.visibility = View.INVISIBLE
-                val result = String(responseBody)
-                val userObject = JSONObject(result)
+        client.get(
+            "${GitHubRepository.BASE_URL}users/$username",
+            object : AsyncHttpResponseHandler() {
+                override fun onSuccess(
+                    statusCode: Int,
+                    headers: Array<out Header>?,
+                    responseBody: ByteArray
+                ) {
+                    detail_loading_indicator.visibility = View.INVISIBLE
+                    val result = String(responseBody)
+                    val userObject = JSONObject(result)
 
-                user = User(
-                    id = userObject.getInt("id"),
-                    login = userObject.getString("login"),
-                    name = userObject.getString("name"),
-                    avatarUrl = userObject.getString("avatar_url"),
-                    type = userObject.getString("type"),
-                    bio = userObject.getString("bio"),
-                    follower = userObject.getInt("followers"),
-                    following = userObject.getInt("following"),
-                    publicRepos = userObject.getInt("public_repos"),
-                    publicGists = userObject.getInt("public_gists"),
-                )
-                populateView()
-            }
+                    user = User(
+                        id = userObject.getInt("id"),
+                        login = userObject.getString("login"),
+                        name = userObject.getString("name"),
+                        avatarUrl = userObject.getString("avatar_url"),
+                        htmlUrl = userObject.getString("html_url"),
+                        type = userObject.getString("type"),
+                        bio = userObject.getString("bio"),
+                        follower = userObject.getInt("followers"),
+                        following = userObject.getInt("following"),
+                        publicRepos = userObject.getInt("public_repos"),
+                        publicGists = userObject.getInt("public_gists"),
+                    )
+                    populateView()
+                }
 
-            override fun onFailure(
-                statusCode: Int,
-                headers: Array<out Header>?,
-                responseBody: ByteArray?,
-                error: Throwable?
-            ) {
-                detail_loading_indicator.visibility = View.INVISIBLE
-                Log.d(TAG, "onFailure: $statusCode | ${error?.message}")
-                error?.printStackTrace()
-            }
-        })
+                override fun onFailure(
+                    statusCode: Int,
+                    headers: Array<out Header>?,
+                    responseBody: ByteArray?,
+                    error: Throwable?
+                ) {
+                    detail_loading_indicator.visibility = View.INVISIBLE
+                    Log.d(TAG, "onFailure: $statusCode | ${error?.message}")
+                    error?.printStackTrace()
+                }
+            })
     }
 
     @SuppressLint("SetTextI18n")
@@ -99,13 +102,32 @@ class DetailActivity : AppCompatActivity() {
     }
 
     private fun initView() {
-        val sectionsPagerAdapter = SectionsPagerAdapter(this, supportFragmentManager)
+        Log.d(TAG, "initView: $username")
+        val sectionsPagerAdapter = SectionsPagerAdapter(this, supportFragmentManager, username)
         view_pager.adapter = sectionsPagerAdapter
 
         tabs.setupWithViewPager(view_pager)
+        view_pager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+            override fun onPageScrolled(
+                position: Int,
+                positionOffset: Float,
+                positionOffsetPixels: Int
+            ) {
+            }
+
+            override fun onPageSelected(position: Int) {
+                val fragment = PlaceholderFragment.newInstance(position + 1, username)
+                fragment.fragmentBecameVisible()
+            }
+
+            override fun onPageScrollStateChanged(state: Int) {
+            }
+
+        })
         fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+            Snackbar.make(view, "Open in browser for ${user.htmlUrl}", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show()
+            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(user.htmlUrl)))
         }
     }
 }
