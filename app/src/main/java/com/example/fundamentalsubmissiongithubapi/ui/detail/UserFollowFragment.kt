@@ -18,7 +18,7 @@ import org.json.JSONArray
 /**
  * A placeholder fragment containing a simple view.
  */
-class PlaceholderFragment : Fragment(), FragmentScrollInterface {
+class UserFollowFragment : Fragment(), FragmentScrollInterface {
 
     private val users = ArrayList<User>()
     private lateinit var username: String
@@ -89,13 +89,13 @@ class PlaceholderFragment : Fragment(), FragmentScrollInterface {
     }
 
     companion object {
-        private val TAG = PlaceholderFragment::class.java.simpleName
+        private val TAG = UserFollowFragment::class.java.simpleName
         private const val ARG_SECTION_NUMBER = "section_number"
         private const val ARG_SECTION_USERNAME = "section_username"
 
         @JvmStatic
-        fun newInstance(sectionNumber: Int, sectionUsername: String): PlaceholderFragment {
-            return PlaceholderFragment().apply {
+        fun newInstance(sectionNumber: Int, sectionUsername: String): UserFollowFragment {
+            return UserFollowFragment().apply {
                 arguments = Bundle().apply {
                     putInt(ARG_SECTION_NUMBER, sectionNumber)
                     putString(ARG_SECTION_USERNAME, sectionUsername)

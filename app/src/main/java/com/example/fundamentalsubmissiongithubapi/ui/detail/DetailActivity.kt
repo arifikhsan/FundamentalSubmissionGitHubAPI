@@ -116,7 +116,7 @@ class DetailActivity : AppCompatActivity() {
             }
 
             override fun onPageSelected(position: Int) {
-                val fragment = PlaceholderFragment.newInstance(position + 1, username)
+                val fragment = UserFollowFragment.newInstance(position + 1, username)
                 fragment.fragmentBecameVisible()
             }
 
