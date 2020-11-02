@@ -104,7 +104,7 @@ class MainActivity : AppCompatActivity(), RecyclerViewUserClickListener {
     }
 
     override fun onItemClicked(view: View, user: User) {
-        Toast.makeText(this@MainActivity, "Get detail for ${user.login}", Toast.LENGTH_SHORT).show()
+//        Toast.makeText(this@MainActivity, "Get detail for ${user.login}", Toast.LENGTH_SHORT).show()
         val intent = Intent(this, DetailActivity::class.java)
         intent.putExtra(DetailActivity.EXTRA_USERNAME, user.login)
         startActivity(intent)
