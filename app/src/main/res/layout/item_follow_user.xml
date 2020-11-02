@@ -15,30 +15,27 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:src="@android:color/darker_gray" />
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/tv_item_username"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:orientation="vertical"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:maxLines="2"
+        android:textSize="16sp"
+        android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/img_avatar"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="@+id/img_avatar"
+        tools:text="@tools:sample/first_names" />
 
-        <TextView
-            android:id="@+id/tv_item_username"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            tools:text="@tools:sample/first_names" />
-
-        <TextView
-            android:id="@+id/tv_item_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:maxLines="2"
-            tools:text="@tools:sample/full_names" />
-    </LinearLayout>
+    <TextView
+        android:id="@+id/tv_item_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:ellipsize="end"
+        android:maxLines="2"
+        app:layout_constraintStart_toStartOf="@id/tv_item_username"
+        app:layout_constraintTop_toBottomOf="@+id/tv_item_username"
+        tools:text="@tools:sample/full_names" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
